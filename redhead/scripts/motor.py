@@ -14,21 +14,7 @@ class Motor():
     FORWARD = 1
     STOP = 0
     REVERSE = -1
-    THROTTLE = .5
-    STEPS = {
-        100: {'speed': 250, 'direction':Motor.FORWARD},
-        80: {'speed': 200, 'direction':Motor.FORWARD},
-        60: {'speed': 150, 'direction':Motor.FORWARD},
-        40: {'speed': 100, 'direction':Motor.FORWARD},
-        20: {'speed': 50, 'direction':Motor.FORWARD},
-        0: {'speed': 0, 'direction':Motor.STOP},
-        -20: {'speed': 50, 'direction':Motor.REVERSE},
-        -40: {'speed': 100, 'direction':Motor.REVERSE},
-        -60: {'speed': 150, 'direction':Motor.REVERSE},
-        -80: {'speed': 200, 'direction':Motor.REVERSE},
-        -100: {'speed': 250, 'direction':Motor.REVERSE}
-    }
-    
+    THROTTLE = .5    
     ROS_NODE = "teleop"
     ROS_MOVE_CHANNEL = "motor_movement"
 
@@ -44,15 +30,21 @@ class Motor():
 
     def move_callback(self, move):
         # check range
+        assert (-100 <= move.left <= 100 and -100 <= move.right <= 100), "out of range"
 
         # transform
+        left_direction = Robot.FORWARD if move.left > 100 else Robot.REVERSE if move.left < 100 else Robot.STOP
+        left_speed = (abs(move.left) * Robot.MAX_SPEED) / 100 * Motor.THROTTLE
+        right_direction = Robot.FORWARD if move.right > 100 else Robot.REVERSE if move.right < 100 else Robot.STOP
+        right_speed = (abs(move.right) * Robot.MAX_SPEED) / 100 * Motor.THROTTLE
 
         # call robot
-
+        self.log("ls: %d, rs: %d, ld: %d, rd: %d" % (left_speed, right_speed, left_direction, right_direction))
+        self.robot.go(left_speed, right_speed, left_direction, right_direction)
 
     def command_loop(self):
         while not rospy.is_shutdown():
-            pass
+            pass #listening and triggering callback
 
 
 if __name__=='__main__':

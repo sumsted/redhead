@@ -12,6 +12,11 @@ from Adafruit_MotorHAT import Adafruit_MotorHAT
 
 
 class Robot(object):
+    MAX_SPEED = 255
+    FORWARD = Adafruit_MotorHAT.FORWARD
+    STOP = Adafruit_MotorHAT.RELEASE
+    BACKWARD = Adafruit_MotorHAT.BACKWARD
+
     def __init__(self, addr=0x60, left_id=1, right_id=2, left_trim=0, right_trim=0,
                  stop_at_exit=True):
         """Create an instance of the robot.  Can specify the following optional
@@ -39,6 +44,12 @@ class Robot(object):
         # Configure all motors to stop at program exit if desired.
         if stop_at_exit:
             atexit.register(self.stop)
+
+    def go(self, left_speed, right_speed, left_direction, right_direction):
+        self._left_speed(left_speed)
+        self._right_speed(right_speed)
+        self._left.run(left_direction)
+        self._right.run(right_direction)
 
     def _left_speed(self, speed):
         """Set the speed of the left motor, taking into account its trim offset.

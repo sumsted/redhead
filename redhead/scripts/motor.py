@@ -4,7 +4,7 @@ Taking in left right Move message -100 to 100.
 Transform to steps for motor controller.
 Call out to adafruit interface.
 """
-if False:
+if True:
     print("remote debugging wait")
     import ptvsd
     ptvsd.enable_attach(address=('0.0.0.0', 3000))

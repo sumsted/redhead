@@ -46,8 +46,8 @@ class Robot(object):
             atexit.register(self.stop)
 
     def go(self, left_speed, right_speed, left_direction, right_direction):
-        self._left_speed(left_speed)
-        self._right_speed(right_speed)
+        self._left.setSpeed(left_speed)
+        self._right.setSpeed(right_speed)
         self._left.run(left_direction)
         self._right.run(right_direction)
 

@@ -52,6 +52,7 @@ add_message_files(
   Move.msg
   Ultra.msg
   April.msg
+  Mpu.msg
 )
 
 ## Generate services in the 'srv' folder

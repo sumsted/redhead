@@ -4,10 +4,11 @@ Taking in left right Move message -100 to 100.
 Transform to steps for motor controller.
 Call out to adafruit interface.
 """
-print("remote debugging wait")
-import ptvsd
-ptvsd.enable_attach(address=('0.0.0.0', 3000))
-ptvsd.wait_for_attach()
+if False:
+    print("remote debugging wait")
+    import ptvsd
+    ptvsd.enable_attach(address=('0.0.0.0', 3000))
+    ptvsd.wait_for_attach()
 
 import rospy
 from robot import Robot

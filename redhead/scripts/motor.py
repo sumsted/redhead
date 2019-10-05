@@ -38,9 +38,9 @@ class Motor():
 
         # transform
         left_direction = Robot.FORWARD if move.left > 100 else Robot.BACKWARD if move.left < 100 else Robot.STOP
-        left_speed = (abs(move.left) * Robot.MAX_SPEED) / 100 * Motor.THROTTLE
+        left_speed = int((abs(move.left) * Robot.MAX_SPEED) / 100 * Motor.THROTTLE)
         right_direction = Robot.FORWARD if move.right > 100 else Robot.BACKWARD if move.right < 100 else Robot.STOP
-        right_speed = (abs(move.right) * Robot.MAX_SPEED) / 100 * Motor.THROTTLE
+        right_speed = int((abs(move.right) * Robot.MAX_SPEED) / 100 * Motor.THROTTLE)
 
         # call robot
         self.log("ls: %d, rs: %d, ld: %d, rd: %d" % (left_speed, right_speed, left_direction, right_direction))

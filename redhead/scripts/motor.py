@@ -38,9 +38,9 @@ class Motor():
         assert (-100 <= move.left <= 100 and -100 <= move.right <= 100), "out of range"
 
         # transform
-        left_direction = Robot.FORWARD if move.left > 100 else Robot.BACKWARD if move.left < 100 else Robot.STOP
+        left_direction = Robot.FORWARD if move.left > 0 else (Robot.BACKWARD if move.left < 0 else Robot.STOP)
         left_speed = int((abs(move.left) * Robot.MAX_SPEED) / 100 * Motor.THROTTLE)
-        right_direction = Robot.FORWARD if move.right > 100 else Robot.BACKWARD if move.right < 100 else Robot.STOP
+        right_direction = Robot.FORWARD if move.right > 0 else (Robot.BACKWARD if move.right < 0 else Robot.STOP)
         right_speed = int((abs(move.right) * Robot.MAX_SPEED) / 100 * Motor.THROTTLE)
 
         # call robot

@@ -15,7 +15,7 @@ class Motor():
     STOP = 0
     REVERSE = -1
     THROTTLE = .5    
-    ROS_NODE = "teleop"
+    ROS_NODE = "motor"
     ROS_MOVE_CHANNEL = "motor_movement"
 
     def log(self, s):

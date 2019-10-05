@@ -1,4 +1,4 @@
-#!/usr/bin/env/python
+#!/usr/bin/env python
 """ teleop - user controlled robot commands
 Through messages sent udp pull left and right motor directions.
 Range -100 to 100 for left and right.

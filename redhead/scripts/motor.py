@@ -1,4 +1,4 @@
-#!/usr/bin/env/python
+#!/usr/bin/env python
 """ motor - node to listen for direction commands
 Taking in left right Move message -100 to 100.
 Transform to steps for motor controller.

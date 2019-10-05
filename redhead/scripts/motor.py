@@ -6,7 +6,7 @@ Call out to adafruit interface.
 """
 print("remote debugging wait")
 import ptvsd
-ptvsd.enable_attach(secret="motor", address=('0.0.0.0', 3000))
+ptvsd.enable_attach(address=('0.0.0.0', 3000))
 ptvsd.wait_for_attach()
 
 import rospy

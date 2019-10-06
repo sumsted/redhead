@@ -1,5 +1,6 @@
 import time
 import io
+from threading import Condition
 import picamera
 from bottle import route, run, template, static_file, route, get, response, HTTPResponse
 from gevent import monkey; monkey.patch_all()

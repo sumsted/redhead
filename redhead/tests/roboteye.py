@@ -1,3 +1,9 @@
+if False:
+    print("remote debugging wait")
+    import ptvsd
+    ptvsd.enable_attach(address=('0.0.0.0', 3000))
+    ptvsd.wait_for_attach()
+
 import time
 import io
 from threading import Condition
@@ -33,9 +39,9 @@ def get_roboteye():
     response.set_header('Content-Type', 'multipart/x-mixed-replace; boundary=FRAME')
     yield response
     while True:
-        with out.condition:
-            out.condition.wait()
-            frame = out.frame()
+        with output.condition:
+            output.condition.wait()
+            frame = output.frame()
         yield b'--FRAME\r\n'
         image_frame = HTTPResponse(frame)
         image_frame.set_header('Content-Type', 'image/jpeg')
@@ -44,5 +50,10 @@ def get_roboteye():
         yield b'\r\n'
 
 if __name__ == '__main__':
-    out = StreamingOutput()
-    run(host=HOST, port=PORT)
+    with picamera.PiCamera(resolution='640x480', framerate=24) as camera:
+        output = StreamingOutput()
+        camera.start_recording(output, format='mjpeg')
+        try:
+            run(host=HOST, port=PORT)
+        finally:
+            camera.stop_recording()

@@ -4,6 +4,8 @@ Through messages sent udp pull left and right motor directions.
 Range -100 to 100 for left and right.
 """
 
+# todo: Throttle messages for slow python motor node callback. Arduino c motor node can handle it :S.
+
 import socket
 import rospy
 from redhead.msg import Move, Ultra, Mpu

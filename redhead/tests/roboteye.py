@@ -24,6 +24,7 @@ class StreamingOutput(object):
 
     def write(self, buf):
         print("so write")
+        sleep(1)
         if buf.startswith(b'\xff\xd8'):
             # New frame, copy the existing buffer's content and notify all
             # clients it's available
@@ -52,7 +53,7 @@ def get_roboteye():
         print("re y1")
         while True:
             with output.condition:
-                sleep(1)
+                # sleep(1)
                 # output.condition.wait()
                 frame = output.frame
                 print("re f")

@@ -33,7 +33,7 @@ class StreamingOutput(object):
             self.buffer.seek(0)
         return self.buffer.write(buf)
 
-@get('/roboteye.mjpg')
+@route('/roboteye.mjpg')
 def get_roboteye():
     try:
         print("re")

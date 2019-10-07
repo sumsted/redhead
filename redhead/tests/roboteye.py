@@ -42,6 +42,7 @@ def get_roboteye():
         response.set_header('Cache-Control', 'no-cache, private')
         response.set_header('Pragma', 'no-cache')
         response.set_header('Content-Type', 'multipart/x-mixed-replace; boundary=FRAME')
+        print("re y0")
         yield response
         print("re y1")
         while True:

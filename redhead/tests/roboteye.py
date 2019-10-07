@@ -43,7 +43,7 @@ def get_roboteye():
         response.set_header('Pragma', 'no-cache')
         response.set_header('Content-Type', 'multipart/x-mixed-replace; boundary=FRAME')
         print("re y0")
-        yield "\r\n"#response
+        # yield ""#response
         print("re y1")
         while True:
             with output.condition:
@@ -51,7 +51,7 @@ def get_roboteye():
                 frame = output.frame
                 print("re f")
 
-            yield '\r\n--FRAME\r\nContent-Type: image/jpeg\r\nContent-Length:%d\r\n\r\n'%len(frame)
+            yield '--FRAME\r\nContent-Type: image/jpeg\r\nContent-Length:%d\r\n\r\n'%len(frame)
             print("re y2")
             # print(frame)
             yield frame

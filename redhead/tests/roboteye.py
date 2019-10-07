@@ -48,7 +48,7 @@ def get_roboteye():
         while True:
             with output.condition:
                 # output.condition.wait()
-                frame = output.frame()
+                frame = output.frame
                 print("re f")
 
             yield b'--FRAME\r\nContent-Type: image/jpeg\r\nContent-Length:%d'%len(frame)

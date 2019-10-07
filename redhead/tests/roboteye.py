@@ -16,10 +16,12 @@ PORT = 8099
 
 class StreamingOutput(object):
     def __init__(self):
+        print("so init")
         self.buffer = io.BytesIO()
         self.condition = Condition()
 
     def write(self, buf):
+        print("so write")
         if buf.startswith(b'\xff\xd8'):
             # New frame, copy the existing buffer's content and notify all
             # clients it's available
@@ -32,22 +34,32 @@ class StreamingOutput(object):
 
 @get('/roboteye.mjpg')
 def get_roboteye():
-    response.status_code = 200    
-    response.set_header('Age', 0)
-    response.set_header('Cache-Control', 'no-cache, private')
-    response.set_header('Pragma', 'no-cache')
-    response.set_header('Content-Type', 'multipart/x-mixed-replace; boundary=FRAME')
-    yield response
-    while True:
-        with output.condition:
-            output.condition.wait()
-            frame = output.frame()
-        yield b'--FRAME\r\n'
-        image_frame = HTTPResponse(frame)
-        image_frame.set_header('Content-Type', 'image/jpeg')
-        image_frame.set_header('Content-Length', len(frame))
-        yield image_frame
-        yield b'\r\n'
+    try:
+        print("re")
+        response.status_code = 200    
+        response.set_header('Age', 0)
+        response.set_header('Cache-Control', 'no-cache, private')
+        response.set_header('Pragma', 'no-cache')
+        response.set_header('Content-Type', 'multipart/x-mixed-replace; boundary=FRAME')
+        yield response
+        print("re y1")
+        while True:
+            with output.condition:
+                output.condition.wait()
+                frame = output.frame()
+                print("re f")
+
+            yield b'--FRAME\r\n'
+            print("re y2")
+            image_frame = HTTPResponse(frame)
+            image_frame.set_header('Content-Type', 'image/jpeg')
+            image_frame.set_header('Content-Length', len(frame))
+            yield image_frame
+            print("re y3")
+            yield b'\r\n'
+            print("re y4")
+    except Exception as e:
+        print(e)
 
 if __name__ == '__main__':
     with picamera.PiCamera(resolution='640x480', framerate=24) as camera:

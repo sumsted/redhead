@@ -53,7 +53,7 @@ def get_roboteye():
 
             yield '--FRAME\r\nContent-Type: image/jpeg\r\nContent-Length:%d\r\n\r\n'%len(frame)
             print("re y2")
-            print(frame)
+            # print(frame)
             yield frame
             print("re y3")
             yield '\r\n'

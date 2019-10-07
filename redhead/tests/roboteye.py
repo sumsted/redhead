@@ -34,6 +34,10 @@ class StreamingOutput(object):
             self.buffer.seek(0)
         return self.buffer.write(buf)
 
+@get('/')
+def get_index():
+    return '<img id="viewport" class="video" src="/roboteye.mjpg">'
+
 @route('/roboteye.mjpg')
 def get_roboteye():
     try:

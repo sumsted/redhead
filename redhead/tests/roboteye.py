@@ -37,7 +37,7 @@ class StreamingOutput(object):
 def get_roboteye():
     try:
         print("re")
-        response.status_code = 200    
+        response.status = 200    
         response.set_header('Age', 0)
         response.set_header('Cache-Control', 'no-cache, private')
         response.set_header('Pragma', 'no-cache')

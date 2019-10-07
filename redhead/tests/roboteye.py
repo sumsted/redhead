@@ -10,7 +10,8 @@ import io
 from threading import Condition
 import picamera
 from bottle import route, run, template, static_file, route, get, response, HTTPResponse
-from gevent import monkey; monkey.patch_all()
+from gevent import monkey, sleep 
+monkey.patch_all()
 
 HOST = '0.0.0.0'
 PORT = 8099
@@ -47,7 +48,8 @@ def get_roboteye():
         print("re y1")
         while True:
             with output.condition:
-                output.condition.wait()
+                gevent.sleep(1)
+                # output.condition.wait()
                 frame = output.frame
                 print("re f")
 

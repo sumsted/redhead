@@ -5,11 +5,14 @@ from gevent import monkey; monkey.patch_all()
 
 @route('/stream')
 def stream():
-
-    header =  "HTTP/2 200\r\nAge: 0\r\ncache-control: private, no-cache\r\ncontent-type: multipart/x-mixed-replace; boundary=FRAME\r\npragma: no-cache\r\n\r\n"
-    yield response(header)
-    time.sleep(3)
-    body =  "<html><body>hello</body></html>"
+    response.status = 200    
+    response.set_header('Age', 0)
+    response.set_header('Cache-Control', 'no-cache, private')
+    response.set_header('Pragma', 'no-cache')
+    response.set_header('Content-Type', 'multipart/x-mixed-replace; boundary=FRAME')
+    yield "k"
+    time.sleep(1)
+    body =  "<html><body>hello2asdf</body></html>"
     yield body
     # time.sleep(5)
     # yield 'END'

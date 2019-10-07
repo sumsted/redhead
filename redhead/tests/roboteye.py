@@ -47,7 +47,7 @@ def get_roboteye():
         print("re y1")
         while True:
             with output.condition:
-                output.condition.wait()
+                # output.condition.wait()
                 frame = output.frame()
                 print("re f")
 

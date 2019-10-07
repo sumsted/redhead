@@ -57,8 +57,8 @@ def get_roboteye():
             print("re y3")
             yield b'\r\n'
             print("re y4")
-    except Exception:
-        print("Exception: ", traceback.format_exc())
+    except Exception as e:
+        print("Exception: ", e, traceback.format_exc())
 
 if __name__ == '__main__':
     with picamera.PiCamera(resolution='640x480', framerate=24) as camera:

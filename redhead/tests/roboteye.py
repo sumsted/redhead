@@ -1,10 +1,11 @@
-if True:
+if False:
     print("remote debugging wait")
     import ptvsd
     ptvsd.enable_attach(address=('0.0.0.0', 3000))
     ptvsd.wait_for_attach()
 
 import time
+import traceback
 import io
 from threading import Condition
 import picamera
@@ -58,8 +59,8 @@ def get_roboteye():
             print("re y3")
             yield b'\r\n'
             print("re y4")
-    except Exception as e:
-        print(e)
+    except Exception:
+        print("Exception: ", traceback.format_exc())
 
 if __name__ == '__main__':
     with picamera.PiCamera(resolution='640x480', framerate=24) as camera:

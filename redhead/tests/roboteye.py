@@ -51,11 +51,11 @@ def get_roboteye():
                 frame = output.frame
                 print("re f")
 
-            yield b'--FRAME\r\nContent-Type: image/jpeg\r\nContent-Length:%d'%len(frame)
+            yield '--FRAME\r\nContent-Type: image/jpeg\r\nContent-Length:%d'%len(frame)
             print("re y2")
             yield frame
             print("re y3")
-            yield b'\r\n'
+            yield '\r\n'
             print("re y4")
     except Exception as e:
         print("Exception: ", e, traceback.format_exc())

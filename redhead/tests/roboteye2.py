@@ -4,6 +4,7 @@ import logging
 import socketserver
 from threading import Condition
 from http import server
+from apriltag import Detector, DetectorOptions
 
 PAGE="""\
 <html>
@@ -16,6 +17,11 @@ PAGE="""\
 </body>
 </html>
 """
+
+
+april_options = DetectorOptions()
+april_detector = Detector(april_options)
+
 
 class StreamingOutput(object):
     def __init__(self):
@@ -59,6 +65,17 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                     with output.condition:
                         output.condition.wait()
                         frame = output.frame
+                    # check for tags dawg
+                    gray = None
+
+                    # convert image to gray
+                    detections, dimg = april_detector.detect(gray, return_image=True)
+
+                    # overlay tag border
+                    # loop through tag detections, print, and overlay image
+                    
+
+                    # send frame
                     self.wfile.write(b'--FRAME\r\n')
                     self.send_header('Content-Type', 'image/jpeg')
                     self.send_header('Content-Length', len(frame))
@@ -77,12 +94,15 @@ class StreamingServer(socketserver.ThreadingMixIn, server.HTTPServer):
     allow_reuse_address = True
     daemon_threads = True
 
-with picamera.PiCamera(resolution='640x480', framerate=24) as camera:
-    output = StreamingOutput()
-    camera.start_recording(output, format='mjpeg')
-    try:
-        address = ('', 8000)
-        server = StreamingServer(address, StreamingHandler)
-        server.serve_forever()
-    finally:
-        camera.stop_recording()
+
+if __name__ == '__main__':
+    
+    with picamera.PiCamera(resolution='640x480', framerate=24) as camera:
+        output = StreamingOutput()
+        camera.start_recording(output, format='mjpeg')
+        try:
+            address = ('', 8000)
+            server = StreamingServer(address, StreamingHandler)
+            server.serve_forever()
+        finally:
+            camera.stop_recording()

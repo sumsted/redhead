@@ -69,7 +69,6 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                     with output.condition:
                         output.condition.wait()
                         frame = output.frame
-                    # check for tags dawg
                     
                     # convert image to gray
                     # orig = cv2.imdecode(frame)
@@ -77,10 +76,12 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                     #     gray = cv2.cvtColor(orig, cv2.COLOR_RGB2GRAY)
                     # else:
                     #     gray = orig
+
                     pil_image = Image.open(io.BytesIO(frame))
                     orig = numpy.array(pil_image)
                     gray = numpy.array(pil_image.convert('L'))
                     
+                    # detect tags
                     detections, dimg = april_detector.detect(gray, return_image=True)
 
                     # overlay tag border
@@ -88,18 +89,20 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                         overlay = orig // 2 + dimg[:, :, None] // 2
                     else:
                         overlay = gray // 2 + dimg // 2
+
                     # frame_with_overlay = cv2.imencode(overlay)
                     overlay_image = Image.fromarray(overlay)
 
+                    # write to buffer
                     with io.BytesIO() as out_buffer:
                         overlay_image.save(out_buffer, format="PNG")
                         frame_with_overlay = out_buffer.getvalue()
 
                     print("num detections: %d", len(detections))
-                    
+
                     # loop through tag detections, print, and overlay image
-                    # for i, detection in enumerate(detections):
-                    #     print(detection.tostring(ident=2))                    
+                    for i, detection in enumerate(detections):
+                        print(detection.tostring(ident=2))                    
 
                     # send frame with overlay
                     self.wfile.write(b'--FRAME\r\n')

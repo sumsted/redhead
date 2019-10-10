@@ -92,7 +92,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                     overlay_image = Image.fromarray(overlay)
 
                     with io.BytesIO() as out_buffer:
-                        out_buffer.save(overlay_image, format="PNG")
+                        out_buffer.write(overlay_image, format="PNG")
                         frame_with_overlay = out_buffer.getvalue()
 
                     # loop through tag detections, print, and overlay image

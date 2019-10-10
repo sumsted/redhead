@@ -5,6 +5,8 @@ import socketserver
 from threading import Condition
 from http import server
 from apriltag import Detector, DetectorOptions
+from PIL import Image
+import cStringIO
 
 PAGE="""\
 <html>
@@ -68,11 +70,15 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                     # check for tags dawg
                     
                     # convert image to gray
-                    orig = cv2.imdecode(frame)
-                    if len(orig.shape) == 3:
-                        gray = cv2.cvtColor(orig, cv2.COLOR_RGB2GRAY)
-                    else:
-                        gray = orig
+                    # orig = cv2.imdecode(frame)
+                    # if len(orig.shape) == 3:
+                    #     gray = cv2.cvtColor(orig, cv2.COLOR_RGB2GRAY)
+                    # else:
+                    #     gray = orig
+                    pil_image = Image.open(cStringIO.StringIO(frame))
+                    orig = numpy.array(pil_image)
+                    gray = numpy.array(pil_image.convert('L'))
+                    
                     detections, dimg = april_detector.detect(gray, return_image=True)
 
                     # overlay tag border
@@ -80,7 +86,13 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                         overlay = orig // 2 + dimg[:, :, None] // 2
                     else:
                         overlay = gray // 2 + dimg // 2
-                    frame_with_overlay = cv2.imencode(overlay)
+                    # frame_with_overlay = cv2.imencode(overlay)
+                    output = Image.fromarray(overlay)
+                    import io
+
+                    with io.BytesIO() as output:
+                        output.save(output, format="PNG")
+                        frame_with_overlay = output.getvalue()
 
                     # loop through tag detections, print, and overlay image
                     # for i, detection in enumerate(detections):

@@ -6,7 +6,7 @@ from threading import Condition
 from http import server
 from apriltag import Detector, DetectorOptions
 from PIL import Image
-
+import traceback
 
 PAGE="""\
 <html>
@@ -105,6 +105,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                     self.wfile.write(frame_with_overlay)
                     self.wfile.write(b'\r\n')
             except Exception as e:
+                print("Exception: ", e, traceback.format_exc())
                 logging.warning(
                     'Removed streaming client %s: %s',
                     self.client_address, str(e))

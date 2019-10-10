@@ -7,6 +7,8 @@ from http import server
 from apriltag import Detector, DetectorOptions
 from PIL import Image
 import traceback
+import numpy
+
 
 PAGE="""\
 <html>

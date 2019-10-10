@@ -75,7 +75,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                     #     gray = cv2.cvtColor(orig, cv2.COLOR_RGB2GRAY)
                     # else:
                     #     gray = orig
-                    pil_image = Image.open(io.StringIO(frame))
+                    pil_image = Image.open(io.BytesIO(frame))
                     orig = numpy.array(pil_image)
                     gray = numpy.array(pil_image.convert('L'))
                     

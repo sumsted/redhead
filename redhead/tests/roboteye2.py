@@ -87,11 +87,11 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                     else:
                         overlay = gray // 2 + dimg // 2
                     # frame_with_overlay = cv2.imencode(overlay)
-                    output = Image.fromarray(overlay)
+                    overlay_image = Image.fromarray(overlay)
 
-                    with io.BytesIO() as output:
-                        output.save(output, format="PNG")
-                        frame_with_overlay = output.getvalue()
+                    with io.BytesIO() as out_buffer:
+                        out_buffer.save(overlay_image, format="PNG")
+                        frame_with_overlay = out_buffer.getvalue()
 
                     # loop through tag detections, print, and overlay image
                     # for i, detection in enumerate(detections):

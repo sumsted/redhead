@@ -91,7 +91,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                     # frame_with_overlay = cv2.imencode(overlay)
                     overlay_image = Image.fromarray(overlay)
 
-                    with io.String() as out_buffer:
+                    with io.StringIO() as out_buffer:
                         out_buffer.save(overlay_image, format="PNG")
                         frame_with_overlay = out_buffer.getvalue()
 

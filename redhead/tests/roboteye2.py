@@ -66,19 +66,25 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                         output.condition.wait()
                         frame = output.frame
                     # check for tags dawg
-                    gray = None
-
+                    
                     # convert image to gray
+                    gray = cv2.imdecode(frame)
                     detections, dimg = april_detector.detect(gray, return_image=True)
 
                     # overlay tag border
-                    # loop through tag detections, print, and overlay image
+                    if len(orig.shape) == 3:
+                        overlay = frame // 2 + dimg[:, :, None] // 2
+                    else:
+                        overlay = gray // 2 + dimg // 2
                     
+                    # loop through tag detections, print, and overlay image
+                    # for i, detection in enumerate(detections):
+                    #     print(detection.tostring(ident=2))                    
 
-                    # send frame
+                    # send frame with overlay
                     self.wfile.write(b'--FRAME\r\n')
-                    self.send_header('Content-Type', 'image/jpeg')
-                    self.send_header('Content-Length', len(frame))
+                    self.send_header('Content-Type', 'image/png')
+                    self.send_header('Content-Length', len(overlay))
                     self.end_headers()
                     self.wfile.write(frame)
                     self.wfile.write(b'\r\n')

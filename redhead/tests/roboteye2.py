@@ -6,7 +6,7 @@ from threading import Condition
 from http import server
 from apriltag import Detector, DetectorOptions
 from PIL import Image
-import cStringIO
+
 
 PAGE="""\
 <html>
@@ -75,7 +75,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                     #     gray = cv2.cvtColor(orig, cv2.COLOR_RGB2GRAY)
                     # else:
                     #     gray = orig
-                    pil_image = Image.open(cStringIO.StringIO(frame))
+                    pil_image = Image.open(io.StringIO(frame))
                     orig = numpy.array(pil_image)
                     gray = numpy.array(pil_image.convert('L'))
                     
@@ -88,7 +88,6 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                         overlay = gray // 2 + dimg // 2
                     # frame_with_overlay = cv2.imencode(overlay)
                     output = Image.fromarray(overlay)
-                    import io
 
                     with io.BytesIO() as output:
                         output.save(output, format="PNG")

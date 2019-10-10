@@ -4,7 +4,10 @@ import logging
 import socketserver
 from threading import Condition
 from http import server
+<<<<<<< HEAD
 from apriltag import Detector, DetectorOptions
+=======
+>>>>>>> 682e6452b6152c9218ec12b34ddbc479a8b6839b
 
 PAGE="""\
 <html>
@@ -18,11 +21,14 @@ PAGE="""\
 </html>
 """
 
+<<<<<<< HEAD
 
 april_options = DetectorOptions()
 april_detector = Detector(april_options)
 
 
+=======
+>>>>>>> 682e6452b6152c9218ec12b34ddbc479a8b6839b
 class StreamingOutput(object):
     def __init__(self):
         self.frame = None
@@ -65,6 +71,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                     with output.condition:
                         output.condition.wait()
                         frame = output.frame
+<<<<<<< HEAD
                     # check for tags dawg
                     
                     # convert image to gray
@@ -85,6 +92,11 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                     self.wfile.write(b'--FRAME\r\n')
                     self.send_header('Content-Type', 'image/png')
                     self.send_header('Content-Length', len(overlay))
+=======
+                    self.wfile.write(b'--FRAME\r\n')
+                    self.send_header('Content-Type', 'image/jpeg')
+                    self.send_header('Content-Length', len(frame))
+>>>>>>> 682e6452b6152c9218ec12b34ddbc479a8b6839b
                     self.end_headers()
                     self.wfile.write(frame)
                     self.wfile.write(b'\r\n')
@@ -100,6 +112,7 @@ class StreamingServer(socketserver.ThreadingMixIn, server.HTTPServer):
     allow_reuse_address = True
     daemon_threads = True
 
+<<<<<<< HEAD
 
 if __name__ == '__main__':
     
@@ -112,3 +125,14 @@ if __name__ == '__main__':
             server.serve_forever()
         finally:
             camera.stop_recording()
+=======
+with picamera.PiCamera(resolution='640x480', framerate=24) as camera:
+    output = StreamingOutput()
+    camera.start_recording(output, format='mjpeg')
+    try:
+        address = ('', 8000)
+        server = StreamingServer(address, StreamingHandler)
+        server.serve_forever()
+    finally:
+        camera.stop_recording()
+>>>>>>> 682e6452b6152c9218ec12b34ddbc479a8b6839b

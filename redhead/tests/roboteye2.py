@@ -98,11 +98,11 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                         overlay_image.save(out_buffer, format="PNG")
                         frame_with_overlay = out_buffer.getvalue()
 
-                    print("num detections: %d", len(detections))
+                    print("num detections: %d"%len(detections))
 
                     # loop through tag detections, print, and overlay image
                     for i, detection in enumerate(detections):
-                        print(detection.tostring(ident=2))                    
+                        print(detection.tostring(indent=2))                    
 
                     # send frame with overlay
                     self.wfile.write(b'--FRAME\r\n')

@@ -95,7 +95,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
 
                     # write to buffer
                     with io.BytesIO() as out_buffer:
-                        overlay_image.save(out_buffer, format="JPG")
+                        overlay_image.save(out_buffer, format="JPEG")
                         frame_with_overlay = out_buffer.getvalue()
 
                     print("num detections: %d"%len(detections))

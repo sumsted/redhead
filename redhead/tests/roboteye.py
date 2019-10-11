@@ -1,7 +1,7 @@
 if False:
     print("remote debugging wait")
     import ptvsd
-    ptvsd.enable_attach(address=('0.0.0.0', 3000))
+    ptvsd.enable_attach(address=('0.0.0.0', 8000))
     ptvsd.wait_for_attach()
 
 import time

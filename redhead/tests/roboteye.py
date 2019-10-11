@@ -1,7 +1,7 @@
 if False:
     print("remote debugging wait")
     import ptvsd
-    ptvsd.enable_attach(address=('0.0.0.0', 8000))
+    ptvsd.enable_attach(address=('0.0.0.0', 3000))
     ptvsd.wait_for_attach()
 
 import time
@@ -14,7 +14,7 @@ from gevent import monkey, sleep
 monkey.patch_all()
 
 HOST = '0.0.0.0'
-PORT = 8099
+PORT = 8000
 
 class StreamingOutput(object):
     def __init__(self):

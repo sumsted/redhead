@@ -95,7 +95,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
 
                     # write to buffer
                     with io.BytesIO() as out_buffer:
-                        overlay_image.save(out_buffer, format="PNG")
+                        overlay_image.save(out_buffer, format="JPG")
                         frame_with_overlay = out_buffer.getvalue()
 
                     print("num detections: %d"%len(detections))
@@ -106,7 +106,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
 
                     # send frame with overlay
                     self.wfile.write(b'--FRAME\r\n')
-                    self.send_header('Content-Type', 'image/png')
+                    self.send_header('Content-Type', 'image/jpeg')
                     self.send_header('Content-Length', len(frame_with_overlay))
                     self.end_headers()
                     self.wfile.write(frame_with_overlay)

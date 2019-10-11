@@ -70,8 +70,8 @@ def get_roboteye():
 
 if __name__ == '__main__':
     with picamera.PiCamera(resolution='640x480', framerate=24) as camera:
-        # output = StreamingOutput()
-        # camera.start_recording(output, format='mjpeg')
+        output = StreamingOutput()
+        camera.start_recording(output, format='mjpeg')
         try:
             run(host=HOST, port=PORT)
         finally:

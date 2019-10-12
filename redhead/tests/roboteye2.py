@@ -8,6 +8,9 @@ from apriltag import Detector, DetectorOptions
 from PIL import Image
 import traceback
 import numpy
+import json
+import mmap
+import contextlib
 
 
 PAGE="""\
@@ -25,6 +28,21 @@ PAGE="""\
 
 april_options = DetectorOptions()
 april_detector = Detector(april_options)
+
+CLEAR_SHARED = """
+                                                                                                                                                        
+                                                                                                                                                        
+                                                                                                                                                        
+                                                                                                                                                        
+                                                                                                                                                        
+"""
+
+APRILTAG_SHARED = '../data/apriltag.shared'
+
+
+def create_map_file():
+    with open(APRILTAG_SHARED, 'w') as f:
+        f.write(CLEAR)
 
 
 class StreamingOutput(object):
@@ -65,52 +83,64 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
             self.send_header('Content-Type', 'multipart/x-mixed-replace; boundary=FRAME')
             self.end_headers()
             try:
-                while True:
-                    with output.condition:
-                        output.condition.wait()
-                        frame = output.frame
-                    
-                    # convert image to gray
-                    # orig = cv2.imdecode(frame)
-                    # if len(orig.shape) == 3:
-                    #     gray = cv2.cvtColor(orig, cv2.COLOR_RGB2GRAY)
-                    # else:
-                    #     gray = orig
+                with open('ultrasonic_sensors.txt', 'r+') as f:
+                    with contextlib.closing(mmap.mmap(f.fileno(), 0)) as m:
+                        while True:
+                            with output.condition:
+                                output.condition.wait()
+                                frame = output.frame
+                            
+                            # convert image to gray
+                            # orig = cv2.imdecode(frame)
+                            # if len(orig.shape) == 3:
+                            #     gray = cv2.cvtColor(orig, cv2.COLOR_RGB2GRAY)
+                            # else:
+                            #     gray = orig
 
-                    pil_image = Image.open(io.BytesIO(frame))
-                    orig = numpy.array(pil_image)
-                    gray = numpy.array(pil_image.convert('L'))
-                    
-                    # detect tags
-                    detections, dimg = april_detector.detect(gray, return_image=True)
+                            pil_image = Image.open(io.BytesIO(frame))
+                            orig = numpy.array(pil_image)
+                            gray = numpy.array(pil_image.convert('L'))
+                            
+                            # detect tags
+                            detections, dimg = april_detector.detect(gray, return_image=True)
 
-                    # overlay tag border
-                    if len(orig.shape) == 3:
-                        overlay = orig // 2 + dimg[:, :, None] // 2
-                    else:
-                        overlay = gray // 2 + dimg // 2
+                            # overlay tag border
+                            if len(orig.shape) == 3:
+                                overlay = orig // 2 + dimg[:, :, None] // 2
+                            else:
+                                overlay = gray // 2 + dimg // 2
 
-                    # frame_with_overlay = cv2.imencode(overlay)
-                    overlay_image = Image.fromarray(overlay)
+                            # frame_with_overlay = cv2.imencode(overlay)
+                            overlay_image = Image.fromarray(overlay)
 
-                    # write to buffer
-                    with io.BytesIO() as out_buffer:
-                        overlay_image.save(out_buffer, format="JPEG")
-                        frame_with_overlay = out_buffer.getvalue()
+                            # write to buffer
+                            with io.BytesIO() as out_buffer:
+                                overlay_image.save(out_buffer, format="JPEG")
+                                frame_with_overlay = out_buffer.getvalue()
 
-                    print("num detections: %d"%len(detections))
+                            num_detections = len(num_detections)
+                            print("num detections: %d"%num_detections)
 
-                    # loop through tag detections, print, and overlay image
-                    for i, detection in enumerate(detections):
-                        print(detection.tostring(indent=2))                    
+                            m.seek(0)  # rewind memory map and clear buffer
+                            m.write(str.encode(CLEAR))
+                            m.flush()
 
-                    # send frame with overlay
-                    self.wfile.write(b'--FRAME\r\n')
-                    self.send_header('Content-Type', 'image/jpeg')
-                    self.send_header('Content-Length', len(frame_with_overlay))
-                    self.end_headers()
-                    self.wfile.write(frame_with_overlay)
-                    self.wfile.write(b'\r\n')
+                            apriltags = {'num_detections':0} if num_detections == 0 else {'num_detections':num_detections,'detections':detections}
+                            m.seek(0)  # rewind memory map and write data
+                            m.write(json.dumps(apriltags))
+                            m.flush()
+
+                            # loop through tag detections, print, and overlay image
+                            for i, detection in enumerate(detections):
+                                print(detection.tostring(indent=2))                    
+
+                            # send frame with overlay
+                            self.wfile.write(b'--FRAME\r\n')
+                            self.send_header('Content-Type', 'image/jpeg')
+                            self.send_header('Content-Length', len(frame_with_overlay))
+                            self.end_headers()
+                            self.wfile.write(frame_with_overlay)
+                            self.wfile.write(b'\r\n')
             except Exception as e:
                 print("Exception: ", e, traceback.format_exc())
                 logging.warning(

@@ -11,6 +11,11 @@ import rospy
 from redhead.msg import Move, Ultra, Mpu
 
 
+def log(s):
+    print(s)
+    rospy.loginfo(s)
+
+
 class Teleop():
     UDP_ADDRESS = "0.0.0.0"
     UDP_PORT = 8484
@@ -20,10 +25,6 @@ class Teleop():
     ROS_ULTRASONIC_CHANNEL = "ultrasonic"
     ROS_MPU_CHANNEL = "mpu"
     MINIMUM_SAFE_DISTANCE = 40
-
-    def log(self,s):
-        print(s)
-        rospy.loginfo(s)
 
     def __init__(self):
         self.log("Initializing...")
@@ -42,7 +43,7 @@ class Teleop():
         self.right = 0
         self.udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.udp_socket.bind((Teleop.UDP_ADDRESS, Teleop.UDP_PORT))
-        self.log("Listening on %s:%d" % (Teleop.UDP_ADDRESS, Teleop.UDP_PORT))
+        log("Listening on %s:%d" % (Teleop.UDP_ADDRESS, Teleop.UDP_PORT))
         self.ultra_left = 999
         self.ultra_low = 999
         self.ultra_right = 999
@@ -96,9 +97,9 @@ class Teleop():
                     self.move_msg.right = self.right
                     self.move_pub.publish(self.move_msg)
                     # self.rate.sleep()
-                    self.log("CONTROL: %d, %d" % (self.move_msg.left, self.move_msg.right))
+                    log("CONTROL: %d, %d" % (self.move_msg.left, self.move_msg.right))
                 else:
-                    self.log("CONTROL: HALT TOO CLOSE!")
+                    log("CONTROL: HALT TOO CLOSE!")
             else:
                 pass # unknown command
 
@@ -106,5 +107,5 @@ if __name__ == '__main__':
     try:
         teleop = Teleop()
         teleop.command_loop()
-    except rospy.ROSInterruptException:
-        pass
+    except rospy.ROSInterruptException as e:
+        log(e)

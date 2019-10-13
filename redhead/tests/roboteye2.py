@@ -11,7 +11,7 @@ import numpy
 import json
 import mmap
 import contextlib
-
+import uuid
 
 PAGE="""\
 <html>
@@ -29,7 +29,7 @@ PAGE="""\
 april_options = DetectorOptions()
 april_detector = Detector(april_options)
 
-CLEAR_SHARED = """
+CLEAR = """
                                                                                                                                                         
                                                                                                                                                         
                                                                                                                                                         
@@ -80,7 +80,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
             self.send_header('Age', 0)
             self.send_header('Cache-Control', 'no-cache, private')
             self.send_header('Pragma', 'no-cache')
-            self.send_header('Content-Type', 'multipart/x-mixed-replace; boundary=FRAME')
+            self.send_header('Content-Type', 'mul   tipart/x-mixed-replace; boundary=FRAME')
             self.end_headers()
             try:
                 with open('ultrasonic_sensors.txt', 'r+') as f:
@@ -118,17 +118,18 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                                 overlay_image.save(out_buffer, format="JPEG")
                                 frame_with_overlay = out_buffer.getvalue()
 
-                            num_detections = len(num_detections)
+                            num_detections = len(detections)
                             print("num detections: %d"%num_detections)
 
-                            m.seek(0)  # rewind memory map and clear buffer
-                            m.write(str.encode(CLEAR))
-                            m.flush()
+                            if num_detections > 0:
+                                m.seek(0)  # rewind memory map and clear buffer
+                                m.write(str.encode(CLEAR))
+                                m.flush()
 
-                            apriltags = {'num_detections':0} if num_detections == 0 else {'num_detections':num_detections,'detections':detections}
-                            m.seek(0)  # rewind memory map and write data
-                            m.write(json.dumps(apriltags))
-                            m.flush()
+                                apriltags = {'id':uuid.uuid4, 'num_detections':num_detections,'detections':detections}
+                                m.seek(0)  # rewind memory map and write data
+                                m.write(json.dumps(apriltags))
+                                m.flush()
 
                             # loop through tag detections, print, and overlay image
                             for i, detection in enumerate(detections):

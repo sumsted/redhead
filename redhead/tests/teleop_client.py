@@ -1,7 +1,7 @@
 import socket
 
 class TeleopClient():
-    UDP_ADDRESS = '192.168.2.58'
+    UDP_ADDRESS = '10.42.0.1'#'192.168.2.58'
     UDP_PORT = 8484
     MESSAGE = "%04d%04d"
     THROTTLE = .75

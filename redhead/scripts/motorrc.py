@@ -12,7 +12,7 @@ if False:
 
 import rospy
 from robotrc import Robot
-from redhead.msg import Move
+from redhead.msg import MoveRC
 
 
 class Motor():
@@ -35,7 +35,7 @@ class Motor():
     def __init__(self):
         self.log("Initializing...")
         rospy.init_node(Motor.ROS_NODE, anonymous=True)
-        rospy.Subscriber(Motor.ROS_MOVE_CHANNEL, Move, self.move_callback)
+        rospy.Subscriber(Motor.ROS_MOVE_CHANNEL, MoveRC, self.move_callback)
         self.robot = Robot()
 
     def move_callback(self, move):

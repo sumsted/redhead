@@ -64,6 +64,10 @@ class Teleop():
         self.pitch = 0
         self.roll = 0
 
+    def log(self,s):
+        print(s)
+        rospy.loginfo(s)
+
     def mpu_callback(self, mpu):
         self.yaw = mpu.yaw
         self.pitch = mpu.pitch

@@ -21,7 +21,7 @@ class TeleopClient():
         print("init")
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         
-    def send(self, tiller, direction, velocity):
+    def send(self, tiller, velocity, direction):
         print("send")
         self.sock.sendto(str.encode(TeleopClient.MESSAGE%(tiller,direction,velocity)), (TeleopClient.UDP_ADDRESS, TeleopClient.UDP_PORT))
 

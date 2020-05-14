@@ -63,8 +63,8 @@ class Robot(object):
             else:
                 current_speed -= Robot.SPEED_STEP
             delta = abs(current_speed - drive_speed)
-            self.drive.setSpeed(abs(current_speed))
-            self.drive.run(Robot.FORWARD if current_speed > 0 else Robot.BACKWARD)
+            self._drive.setSpeed(abs(current_speed))
+            self._drive.run(Robot.FORWARD if current_speed > 0 else Robot.BACKWARD)
             print(abs(current_speed), Robot.FORWARD if current_speed > 0 else Robot.BACKWARD, Robot.DELAY)
             time.sleep(Robot.DELAY)
         current_speed = drive_speed

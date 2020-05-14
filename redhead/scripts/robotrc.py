@@ -57,7 +57,7 @@ class Robot(object):
         drive_speed = drive_speed if drive_direction == Robot.FORWARD else -drive_speed
         
         delta = abs(current_speed - drive_speed)
-        while delta > SPEED_STEP:
+        while delta > Robot.SPEED_STEP:
             if current_speed < drive_speed:
                 current_speed += Robot.SPEED_STEP
             else:

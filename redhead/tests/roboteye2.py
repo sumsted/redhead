@@ -126,7 +126,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                                 m.write(str.encode(CLEAR))
                                 m.flush()
 
-                                apriltags = {'id':uuid.uuid4, 'num_detections':num_detections,'detections':detections}
+                                apriltags = {'uuid':uuid.uuid4, 'num_detections':num_detections,'detections':detections}
                                 m.seek(0)  # rewind memory map and write data
                                 m.write(json.dumps(apriltags))
                                 m.flush()

@@ -1,6 +1,4 @@
 <launch>
-    <node pkg="redhead" type="teleop.py" name="teleop"/>
-    <node pkg="rosserial_python" type="serial_node.py" args="/dev/ttyUSB0" name="USB0"/>
-    <node pkg="rosserial_python" type="serial_node.py" args="/dev/ttyUSB1" name="USB1"/>
-    <node pkg="rosserial_python" type="serial_node.py" args="/dev/ttyUSB2" name="USB2"/>
+    <node pkg="redhead" type="teleoprc.py" name="teleop"/>
+    <node pkg="redhead" type="motorrc.py" name="motor"/>
 </launch>

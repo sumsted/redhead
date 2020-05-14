@@ -69,8 +69,8 @@ class Robot(object):
         current_speed = drive_speed
         self._current_speed = abs(current_speed)
         self._current_direction = Robot.FORWARD if current_speed > 0 else Robot.BACKWARD
-        self.drive.setSpeed(self._current_speed)
-        self.drive.run(self._current_direction)
+        self._drive.setSpeed(self._current_speed)
+        self._drive.run(self._current_direction)
 
     def _tiller_speed(self, speed):
         """Set the speed of the tiller, taking into account its trim offset.

@@ -40,7 +40,7 @@ class Motor():
 
     def move_callback(self, move):
         # check range
-        assert (Motor.VELOCITY_RANGE(0) >= move.velocity >= Motor.VELOCITY_RANGE(1)), "velocity out of range"
+        assert (Motor.VELOCITY_RANGE[0] >= move.velocity >= Motor.VELOCITY_RANGE[1]), "velocity out of range"
         assert (move.tiller in Motor.TILLER_RANGE), "tiller out of range"
         assert (move.direction in Motor.DIRECTION_RANGE), "direction out of range"
 

@@ -50,8 +50,9 @@ class Teleop():
         self.move_msg.velocity = Teleop.STOP
 
         self.command = "CONTROL"
-        self.left = 0
-        self.right = 0
+        self.tiller = 0
+        self.direction = 0
+        self.velocity = 0
         self.udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.udp_socket.bind((Teleop.UDP_ADDRESS, Teleop.UDP_PORT))
         log("Listening on %s:%d" % (Teleop.UDP_ADDRESS, Teleop.UDP_PORT))
@@ -82,25 +83,28 @@ class Teleop():
 
     def parse_udp_data(self, data):
         self.command = "CONTROL"
-        if len(data) == 8:
-            self.left = int(data[:4])
-            self.right = int(data[4:])
+        if len(data) == 12:
+            self.tiller = int(data[:4])
+            self.direction = int(data[4:8])
+            self.velocity = int(data[8:12])
         else:
-            self.left = 0
-            self.right = 0
+            self.tiller = 0
+            self.direction = 0
+            self.velocity = 0
 
     def safe(self):
-        forward = True if (self.left + self.right) > 0 else False
-        if forward:
-            if self.ultra_front > 20 and self.ultra_low > 5:
-                return True
-            else:
-                return False
-        else:
-            if self.ultra_rear > 20:
-                return True
-            else:
-                return False
+        return True
+        # forward = True if (self.left + self.right) > 0 else False
+        # if forward:
+        #     if self.ultra_front > 20 and self.ultra_low > 5:
+        #         return True
+        #     else:
+        #         return False
+        # else:
+        #     if self.ultra_rear > 20:
+        #         return True
+        #     else:
+        #         return False
 
     def command_loop(self):
         while not rospy.is_shutdown():

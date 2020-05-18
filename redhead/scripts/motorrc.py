@@ -25,7 +25,7 @@ class Motor():
 
     TILLER_RANGE = (0,1,2)
     DIRECTION_RANGE = (0,1,2)
-    VELOCITY_RANGE = (0, 150)
+    VELOCITY_RANGE = (0, 255)
     TILLER_VELOCITY = 150    
 
     def log(self, s):
@@ -47,7 +47,7 @@ class Motor():
         self.robot.go(
             move.velocity,
             move.direction,
-            Motor.TILLER_VELOCITY,
+            0 if move.tiller == 0 else Motor.TILLER_VELOCITY,
             move.tiller
         )
 

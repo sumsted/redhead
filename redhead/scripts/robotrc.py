@@ -12,7 +12,7 @@ from Adafruit_MotorHAT import Adafruit_MotorHAT
 
 
 class Robot(object):
-    MAX_SPEED = 150
+    MAX_SPEED = 255
     FORWARD = Adafruit_MotorHAT.FORWARD
     STOP = Adafruit_MotorHAT.RELEASE
     BACKWARD = Adafruit_MotorHAT.BACKWARD

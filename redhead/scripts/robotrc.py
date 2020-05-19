@@ -16,7 +16,7 @@ class Robot(object):
     FORWARD = Adafruit_MotorHAT.FORWARD
     STOP = Adafruit_MotorHAT.RELEASE
     BACKWARD = Adafruit_MotorHAT.BACKWARD
-    SPEED_STEP = 75
+    SPEED_STEP = 300
     DELAY = 0
 
     def __init__(self, addr=0x60, tiller_id=1, drive_id=2, tiller_trim=0, drive_trim=0,
